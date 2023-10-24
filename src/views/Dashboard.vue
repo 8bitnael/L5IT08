@@ -11,7 +11,7 @@
                     >
                         <b-card-body>
                             <b-card-text>
-                                <h2>USER ID: "{{ storedUuid }}"</h2>
+                                <h2>Username: "{{ storedUuid }}"</h2>
                             </b-card-text>
                         </b-card-body>
                     </b-collapse>
@@ -30,16 +30,16 @@
                         <h2>Retrieve personal information</h2>
                         <div class="form-floating">
                             <input
-                                type="uuid"
+                                type="Username"
                                 class="form-control"
-                                id="uuid"
-                                placeholder="Uuid"
+                                id="Username"
+                                placeholder="Username"
                                 required
                                 v-model="uuid"
                             />
-                            <label for="floatingInput">uuid</label>
+                            <label for="floatingInput">Username</label>
                         </div>
-                        <button type="submit">Retrieve</button>
+                        <button type="submit">Retrieve JSON</button>
                     </form>
 
                     <!--     -->
@@ -48,11 +48,19 @@
 
                     <b-card class="text-center">
                         <div class="bg-secondary text-light">
+                            A dynamic CSS which can be customized for several color schemes (2.6) 
+                        </div>
+                    </b-card>
+
+                    <b-card class="text-center">
+                        <div class="bg-secondary text-light">
                             User will have various menu items to access
                             different pages and they will have the option to
                             hide/show menu items as per their preference (2.5)
                         </div>
                     </b-card>
+
+
                 </div>
             </div>
         </b-card>
