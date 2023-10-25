@@ -6,7 +6,7 @@ import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import "firebase/firestore";
-//import menubar from "../src/data/menubar.json";
+import 'font-awesome/css/font-awesome.css'
 
 
 var firebaseConfig = {

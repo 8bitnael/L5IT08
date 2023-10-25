@@ -2,17 +2,35 @@
   <div id="app">
     <div>
       <b-nav tabs align="center" id="custom-nav">
-        <b-nav-item><router-link v-if="!isAuthenticated" to="/">LOGIN</router-link></b-nav-item>
-        <b-nav-item><router-link v-if="!isAuthenticated" to="/register">REGISTER</router-link></b-nav-item>
-        <b-nav-item><router-link v-if="isAuthenticated" to="/dashboard">DASHBOARD</router-link></b-nav-item>
+        <b-nav-item
+          ><router-link v-if="!isAuthenticated" to="/"
+            >LOGIN</router-link
+          ></b-nav-item
+        >
+        <b-nav-item
+          ><router-link v-if="!isAuthenticated" to="/register"
+            >REGISTER</router-link
+          ></b-nav-item
+        >
+        <b-nav-item
+          ><router-link v-if="isAuthenticated" to="/dashboard"
+            >DASHBOARD</router-link
+          ></b-nav-item
+        >
 
-         <template v-for="item in items">
-            <b-nav-item :key="item.route" v-if="isAuthenticated && item.isVisible" >
-                  <router-link  :to="item.route">{{ item.title }}</router-link>
-            </b-nav-item>
-         </template>
+        <template v-for="item in items">
+          <b-nav-item
+            :key="item.route"
+            v-if="isAuthenticated && item.isVisible"
+          >
+            <router-link :to="item.route">{{ item.title }} </router-link>
+            <b-button @click="removeMenuItem(index)" variant="danger" size="sm"
+              >X</b-button
+            >
+          </b-nav-item>
+        </template>
 
-         <button v-if="isAuthenticated" @click="logout">Logout</button>
+        <button v-if="isAuthenticated" @click="logout">Logout</button>
       </b-nav>
     </div>
     <router-view />
@@ -30,7 +48,8 @@ export default {
     return {
       isAuthenticated: false,
       //items: menubar.items,
-      items: [],// Inizializza un array vuoto per i menu items
+      items: [], // Inizializza un array vuoto per i menu items
+      removedItems: [], // Array per gli elementi rimossi
     };
   },
   created() {
@@ -40,7 +59,7 @@ export default {
     });
   },
   mounted() {
-    const savedMenuItems = localStorage.getItem('items');
+    const savedMenuItems = localStorage.getItem("items");
 
     if (savedMenuItems != null) {
       // Carica i dati dal localStorage e parsa la stringa JSON in un oggetto JavaScript
@@ -50,10 +69,19 @@ export default {
       const mitems = menubar.items;
       this.items = mitems;
       // Salva l'array in localStorage convertendolo in una stringa JSON
-      localStorage.setItem('items', JSON.stringify(mitems));
+      localStorage.setItem("items", JSON.stringify(mitems));
     }
   },
   methods: {
+    removeMenuItem(index) {
+      // Rimuovi un menu item dall'array principale
+      const removedItem = this.items.splice(index, 1)[0];
+      // Aggiungi l'elemento rimosso all'array removedItems
+      this.removedItems.push(removedItem);
+      // Salva gli array aggiornati nel localStorage
+      localStorage.setItem("items", JSON.stringify(this.items));
+      localStorage.setItem("removedItems", JSON.stringify(this.removedItems));
+    },
     logout() {
       firebase
         .auth()
@@ -102,7 +130,6 @@ export default {
 input {
   margin-right: 20px;
 }
-
 
 #custom-nav {
   background-color: black; /* Sostituisci con il colore desiderato */

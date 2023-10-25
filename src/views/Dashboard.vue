@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <b-card border-variant="dark" header="Preferences">
+        <b-card border-variant="dark" header="PREFERENCES">
             <div class="accordion" role="tablist">
                 <b-card no-body class="mb-1">
                     <b-collapse
@@ -44,22 +44,25 @@
 
                     <!--     -->
                      <pre style="text-align: left;">{{ userData }}</pre>
-                    <!--     -->
+                    <!--     -->  
 
                     <b-card class="text-center">
                         <div class="bg-secondary text-light">
-                            A dynamic CSS which can be customized for several color schemes (2.6) 
+                            Menu items removed  (2.5)
                         </div>
                     </b-card>
 
-                    <b-card class="text-center">
-                        <div class="bg-secondary text-light">
-                            User will have various menu items to access
-                            different pages and they will have the option to
-                            hide/show menu items as per their preference (2.5)
-                        </div>
-                    </b-card>
-                    
+                     <template v-for="item in removedItems">
+                        <b-nav-item
+                            :key="item.route"
+                            v-if="isAuthenticated && item.isVisible"
+                        >
+                            <router-link :to="item.route">{{ item.title }} </router-link>
+                         
+                            >
+                        </b-nav-item>
+                    </template>
+                     
 
                 </div>
             </div>
@@ -78,6 +81,7 @@ export default {
             storedUuid: null,
             data: null,
             userData: null, // Inizializza userData a null
+            removedItems: [],
         };
     },
     computed: {
@@ -123,7 +127,10 @@ export default {
         }
     },
     mounted() {
-        // Codice da eseguire quando il componente è stato montato nel DOM
+        const removedMenuItems = localStorage.getItem("removedItems");
+             if (removedMenuItems != null) {
+                this.removedItems = JSON.parse(removedMenuItems);
+        }
     },
     // Altri hook del ciclo di vita (ad esempio: updated, beforeDestroy, ecc.)
 };
