@@ -40,8 +40,6 @@ export default {
     };
   },
   created() {
-     console.log("SETTO IL MENU");
-    // localStorage.setItem("items", this.menuitems);
     // Controlla lo stato di autenticazione all'avvio dell'applicazione
     firebase.auth().onAuthStateChanged((user) => {
       this.isAuthenticated = user !== null;
