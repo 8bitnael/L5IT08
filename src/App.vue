@@ -2,12 +2,23 @@
   <div id="app">
     <div>
       <b-nav tabs align="center" id="custom-nav">
-        <b-nav-item><router-link v-if="!isAuthenticated" to="/">Login</router-link></b-nav-item>
-        <b-nav-item><router-link v-if="!isAuthenticated" to="/register">Register</router-link></b-nav-item>
-        <b-nav-item><router-link v-if="isAuthenticated" to="/dashboard">Dashboard</router-link></b-nav-item>
-        <b-nav-item v-for="item in items" :key="item.route">
-            <router-link v-if="isAuthenticated" :to="item.route">{{ item.title }}</router-link>
-        </b-nav-item>
+        <b-nav-item><router-link v-if="!isAuthenticated" to="/">LOGIN</router-link></b-nav-item>
+        <b-nav-item><router-link v-if="!isAuthenticated" to="/register">REGISTER</router-link></b-nav-item>
+        <b-nav-item><router-link v-if="isAuthenticated" to="/dashboard">DASHBOARD</router-link></b-nav-item>
+        <!--
+         <template v-for="item in items">
+            <b-nav-item :key="item.route" v-if="isAuthenticated && item.isVisible" >
+                  <router-link  :to="item.route">{{ item.title }}</router-link>
+            </b-nav-item>
+         </template>
+         -->
+
+         <template v-for="item in items">
+            <b-nav-item :key="item.route" v-if="isAuthenticated && item.isVisible" >
+                  <router-link  :to="item.route">{{ item.title }}</router-link>
+            </b-nav-item>
+         </template>
+
          <button v-if="isAuthenticated" @click="logout">Logout</button>
       </b-nav>
     </div>
@@ -29,6 +40,8 @@ export default {
     };
   },
   created() {
+     console.log("SETTO IL MENU");
+    // localStorage.setItem("items", this.menuitems);
     // Controlla lo stato di autenticazione all'avvio dell'applicazione
     firebase.auth().onAuthStateChanged((user) => {
       this.isAuthenticated = user !== null;

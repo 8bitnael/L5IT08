@@ -6,6 +6,7 @@ import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import "firebase/firestore";
+//import menubar from "../src/data/menubar.json";
 
 
 var firebaseConfig = {
@@ -29,4 +30,7 @@ Vue.config.productionTip = false;
 new Vue({
     router,
     render: h => h(App),
+    data: {
+      // items: [],
+    }
 }).$mount('#app');

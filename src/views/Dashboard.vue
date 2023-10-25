@@ -59,7 +59,11 @@
                             hide/show menu items as per their preference (2.5)
                         </div>
                     </b-card>
-
+                    <b-nav>
+                        <b-nav-item v-for="item in items" :key="item.route">
+                            <input type="checkbox" v-model="item.selected"> {{ item.title }}
+                        </b-nav-item>
+                    </b-nav>
 
                 </div>
             </div>
