@@ -1,79 +1,95 @@
 <template>
-    <div id="app">
-        <div id="nav">
-            <router-link v-if="!isAuthenticated" to="/">Login</router-link> |
-            <router-link v-if="!isAuthenticated" to="/register">Register</router-link> |
-            <router-link v-if="isAuthenticated" to="/dashboard">Dashboard</router-link>
-            <button v-if="isAuthenticated" @click="logout">Logout</button>
-        </div>
-        <router-view />
+  <div id="app">
+    <div>
+      <b-nav tabs align="center" id="custom-nav">
+        <b-nav-item><router-link v-if="!isAuthenticated" to="/">Login</router-link></b-nav-item>
+        <b-nav-item><router-link v-if="!isAuthenticated" to="/register">Register</router-link></b-nav-item>
+        <b-nav-item><router-link v-if="isAuthenticated" to="/dashboard">Dashboard</router-link></b-nav-item>
+        <b-nav-item v-for="item in items" :key="item.route">
+            <router-link v-if="isAuthenticated" :to="item.route">{{ item.title }}</router-link>
+        </b-nav-item>
+         <button v-if="isAuthenticated" @click="logout">Logout</button>
+      </b-nav>
     </div>
+    <router-view />
+  </div>
 </template>
 
 <script>
-import firebase from 'firebase';
-import Vue from 'vue';
-import modal from '../src/components/Modal.vue';
+import firebase from "firebase";
+import Vue from "vue";
+import modal from "../src/components/Modal.vue";
+import menubar from "../src/data/menubar.json";
 
 export default {
-    data() {
-        return {
-            isAuthenticated: false,
-        };
+  data() {
+    return {
+      isAuthenticated: false,
+      items: menubar.items,
+    };
+  },
+  created() {
+    // Controlla lo stato di autenticazione all'avvio dell'applicazione
+    firebase.auth().onAuthStateChanged((user) => {
+      this.isAuthenticated = user !== null;
+    });
+  },
+  methods: {
+    check() {
+        console.log(this.items[0].title);
     },
-    created() {
-        // Controlla lo stato di autenticazione all'avvio dell'applicazione
-        firebase.auth().onAuthStateChanged((user) => {
-            this.isAuthenticated = user !== null;
+    logout() {
+      firebase
+        .auth()
+        .signOut()
+        .then(() => {
+          //alert('Successfully logged out');
+          const modalComponent = new Vue(modal);
+          modalComponent.$mount();
+          modalComponent.showModal(
+            "Authentication",
+            "Successfully logged out!"
+          );
+          localStorage.removeItem("uuid");
+          this.$router.push("/");
+        })
+        .catch((error) => {
+          alert(error.message);
+          this.$router.push("/");
         });
     },
-    methods: {
-        logout() {
-            firebase
-                .auth()
-                .signOut()
-                .then(() => {
-                    //alert('Successfully logged out');
-                    const modalComponent = new Vue(modal);
-                    modalComponent.$mount();
-                    modalComponent.showModal(
-                        'Authentication',
-                        'Successfully logged out!'
-                    );
-                    localStorage.removeItem('uuid')
-                    this.$router.push('/');
-                })
-                .catch((error) => {
-                    alert(error.message);
-                    this.$router.push('/');
-                });
-        },
-    },
+  },
 };
 </script>
 <style>
 #app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
 }
 
 #nav {
-    padding: 30px;
+  padding: 30px;
 }
 
 #nav a {
-    font-weight: bold;
-    color: #2c3e50;
+  font-weight: bold;
+  color: #2c3e50;
 }
 
 #nav a.router-link-exact-active {
-    color: #42b983;
+  color: #42b983;
 }
 
 input {
-    margin-right: 20px;
+  margin-right: 20px;
+}
+
+
+#custom-nav {
+  background-color: black; /* Sostituisci con il colore desiderato */
+  color: slategrey; /* Cambia il colore del testo se necessario */
 }
 </style>

@@ -29,6 +29,18 @@ const routes = [
             authRequired: true,
         },
     },
+    {
+        path: '/page1',
+        name: 'Page1',
+        component: () =>
+            import('../views/EmptyPage1.vue'),
+    },
+    {
+        path: '/page2',
+        name: 'Page2',
+        component: () =>
+            import('../views/EmptyPage2.vue'),
+    }
 ];
 
 const router = new VueRouter({
