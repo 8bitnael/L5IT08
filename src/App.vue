@@ -5,13 +5,6 @@
         <b-nav-item><router-link v-if="!isAuthenticated" to="/">LOGIN</router-link></b-nav-item>
         <b-nav-item><router-link v-if="!isAuthenticated" to="/register">REGISTER</router-link></b-nav-item>
         <b-nav-item><router-link v-if="isAuthenticated" to="/dashboard">DASHBOARD</router-link></b-nav-item>
-        <!--
-         <template v-for="item in items">
-            <b-nav-item :key="item.route" v-if="isAuthenticated && item.isVisible" >
-                  <router-link  :to="item.route">{{ item.title }}</router-link>
-            </b-nav-item>
-         </template>
-         -->
 
          <template v-for="item in items">
             <b-nav-item :key="item.route" v-if="isAuthenticated && item.isVisible" >
@@ -36,7 +29,8 @@ export default {
   data() {
     return {
       isAuthenticated: false,
-      items: menubar.items,
+      //items: menubar.items,
+      items: [],// Inizializza un array vuoto per i menu items
     };
   },
   created() {
@@ -45,10 +39,21 @@ export default {
       this.isAuthenticated = user !== null;
     });
   },
+  mounted() {
+    const savedMenuItems = localStorage.getItem('items');
+
+    if (savedMenuItems != null) {
+      // Carica i dati dal localStorage e parsa la stringa JSON in un oggetto JavaScript
+      this.items = JSON.parse(savedMenuItems);
+    } else {
+      // Se non ci sono dati nel localStorage, inizializza con i valori predefiniti (menubar.items)
+      const mitems = menubar.items;
+      this.items = mitems;
+      // Salva l'array in localStorage convertendolo in una stringa JSON
+      localStorage.setItem('items', JSON.stringify(mitems));
+    }
+  },
   methods: {
-    check() {
-        console.log(this.items[0].title);
-    },
     logout() {
       firebase
         .auth()
