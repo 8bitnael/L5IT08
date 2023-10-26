@@ -24,8 +24,7 @@
             v-if="isAuthenticated && item.isVisible"
           >
             <router-link :to="item.route">{{ item.title }} </router-link>
-            <b-button @click="removeMenuItem(index)" variant="danger" size="sm"
-              >X</b-button
+            <b-button @click="removeMenuItem(item)" variant="danger" size="sm">X</b-button
             >
           </b-nav-item>
         </template>
@@ -73,14 +72,18 @@ export default {
     }
   },
   methods: {
-    removeMenuItem(index) {
-      // Rimuovi un menu item dall'array principale
-      const removedItem = this.items.splice(index, 1)[0];
-      // Aggiungi l'elemento rimosso all'array removedItems
-      this.removedItems.push(removedItem);
-      // Salva gli array aggiornati nel localStorage
-      localStorage.setItem("items", JSON.stringify(this.items));
-      localStorage.setItem("removedItems", JSON.stringify(this.removedItems));
+    removeMenuItem(item) {
+      // Trova l'indice dell'oggetto da rimuovere all'interno di this.items
+      const index = this.items.findIndex(menuItem => menuItem.route === item.route);
+      if (index !== -1) {
+          // Rimuovi l'elemento dall'array this.items
+          const removedItem = this.items.splice(index, 1)[0];
+          // Aggiungi l'elemento rimosso all'array removedItems
+          this.removedItems.push(removedItem);
+          // Salva gli array aggiornati nel localStorage
+          localStorage.setItem("items", JSON.stringify(this.items));
+          localStorage.setItem("removedItems", JSON.stringify(this.removedItems));
+      }
     },
     logout() {
       firebase
